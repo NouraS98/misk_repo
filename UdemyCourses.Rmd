@@ -1,0 +1,56 @@
+---
+title: "Udemy Courses"
+output: html_document
+author : "Noura Alsabr"
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+courses <- read_csv("udemy_courses.csv")
+options(dplyr.summarise.inform = FALSE)
+
+```
+
+10 best-selling free Udemy courses 
+```{r ,echo=FALSE }
+library(rmarkdown)
+free <-  courses %>%
+    filter(price == "0") %>%  arrange(desc(num_subscribers)) %>% 
+    select(course_title, level , subject,num_subscribers ,url)  
+
+
+paged_table(free[1:10,], options = list(rows.print = 15))
+```
+
+The average price of the courses in dollar for each subject
+
+```{r ,echo=FALSE }
+average_for_subject <- courses %>%
+  group_by(subject) %>% 
+  summarise(avg = mean(price))
+
+paged_table(average_for_subject )
+
+```
+Price and number of reviews 
+
+```{r ,echo=FALSE }
+
+ggplot(courses, aes(x = num_lectures, y = num_subscribers)) +
+  geom_point()  + labs(x = "Number of lectures", y = "Subscribers")   
+
+```
+
+Subject and number of subscribers
+
+```{r ,echo=FALSE , warning = FALSE ,message = FALSE}
+ggplot(courses, aes(subject, num_subscribers)) +
+  geom_bar(stat = "summary", fun.y = "mean", fill = "#98AFC7", col = "#98AFC7")  + labs(x = "Subject", y = "Subscribers")   
+
+
+```
+
+
