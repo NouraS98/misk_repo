@@ -1,0 +1,33 @@
+---
+title: "ChickWts"
+author: "Noura Alsabr"
+date: "10/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+
+```{r  ,echo=FALSE , warning = FALSE ,message = FALSE}
+library(tidyverse)
+chickwts %>% group_by(feed) %>% 
+  summarise(n = n()
+            , avg = mean(weight)
+            , SD = sd(weight)) 
+
+```
+
+
+
+```{r , echo=FALSE , warning = FALSE ,message = FALSE}
+chickwts %>% 
+  ggplot(aes (x= feed , y = weight)) + 
+  geom_jitter() +
+  stat_summary(fun.data = mean_sdl,
+               fun.args = list(mult = 1), 
+               col = "Red" ) +
+  labs(x= "data" , y= "mean")
+```
