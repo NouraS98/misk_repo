@@ -5,22 +5,30 @@ author : "Noura Alsabr"
 date: "`r Sys.Date()`"
 ---
 
+Data is from a [Kaggle](https://www.kaggle.com/andrewmvd/udemy-courses) source.
+
+Put some description about the data.
+
+What are the kinds of research questions that you can address with this data given the tools we have covered so far in the course.
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
+library(rmarkdown)
 courses <- read_csv("udemy_courses.csv")
 options(dplyr.summarise.inform = FALSE)
 
 ```
 
 10 best-selling free Udemy courses 
-```{r ,echo=FALSE }
-library(rmarkdown)
-free <-  courses %>%
-    filter(price == "0") %>%  arrange(desc(num_subscribers)) %>% 
-    select(course_title, level , subject,num_subscribers ,url)  
 
+```{r ,echo=FALSE }
+
+free <- courses %>%
+  filter(price == "0") %>%
+  arrange(desc(num_subscribers)) %>% 
+  select(course_title, level , subject,num_subscribers ,url)  
 
 paged_table(free[1:10,], options = list(rows.print = 15))
 ```
@@ -35,20 +43,27 @@ average_for_subject <- courses %>%
 paged_table(average_for_subject )
 
 ```
+
 Price and number of reviews 
 
 ```{r ,echo=FALSE }
-
-ggplot(courses, aes(x = num_lectures, y = num_subscribers)) +
-  geom_point()  + labs(x = "Number of lectures", y = "Subscribers")   
+courses %>% 
+  filter(num_subscribers > 0) %>% 
+  ggplot(aes(log10(num_lectures), log10(num_subscribers))) +
+  geom_point(shape = 16, alpha = 0.2)  + 
+  labs(x = "Number of lectures", y = "Subscribers")   
 
 ```
 
 Subject and number of subscribers
 
 ```{r ,echo=FALSE , warning = FALSE ,message = FALSE}
+
 ggplot(courses, aes(subject, num_subscribers)) +
-  geom_bar(stat = "summary", fun.y = "mean", fill = "#98AFC7", col = "#98AFC7")  + labs(x = "Subject", y = "Subscribers")   
+  geom_jitter(width = 0.3, shape = 16, alpha = 0.4) +
+  stat_summary(fun.data = mean_sdl, fun.args = list(mult = 2), col = "red") +
+  # geom_bar(stat = "summary", fun.y = "mean", fill = "#98AFC7", col = "#98AFC7") +
+  labs(x = "Subject", y = "Subscribers")
 
 
 ```

@@ -10,17 +10,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
+Can you format the table a bit more nicely?
 
 ```{r  ,echo=FALSE , warning = FALSE ,message = FALSE}
 library(tidyverse)
 chickwts %>% group_by(feed) %>% 
-  summarise(n = n()
-            , avg = mean(weight)
-            , SD = sd(weight)) 
+  summarise(n = n(),
+            avg = mean(weight),
+            SD = sd(weight)) 
 
 ```
 
-
+Tehre should be a boxplot
 
 ```{r , echo=FALSE , warning = FALSE ,message = FALSE}
 chickwts %>% 
@@ -31,3 +32,9 @@ chickwts %>%
                col = "Red" ) +
   labs(x= "data" , y= "mean")
 ```
+
+
+What happpened with the rest of the stats?
+
+
+
